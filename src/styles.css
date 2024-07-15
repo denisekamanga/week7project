@@ -117,6 +117,9 @@ main{
     border-radius: 6px;
     color: white;
     margin-left: 5px;
+    width: 150px;
+   height: 48.4px;
+   font-size: 14px;
 
 }
 .weather-app-data{
