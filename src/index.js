@@ -55,6 +55,12 @@ function searchCity(city){
   
 }
 
+function getForcast(city){
+
+    let apikey = "f21c03107be2b6tbd1077of9aa76543f";
+    let apiURL = `https://api.shecodes.io/weather/v1/current?query={city}&key={apikey}`;
+}
+
 
 function handleSearchSubmit(event){
 
@@ -64,5 +70,33 @@ function handleSearchSubmit(event){
     searchCity(searchInput.value)
 };
 
+function displayforecast(){
+let forecast = document.querySelector("#forecast");
+let forecastHTML = "";
+
+let days = ["Tues", "Wed", "Thurs", "Fri", "Sat"];
+
+days.forEach(function(day){
+
+    forecastHTML =  forecastHTML + `
+   <div class="weather-forecast-day">
+                <div class="weather-forecast-date">${day}</div>
+                <div class="weather-forecast-icon">☀️</div>
+                <div class="weather-forecast-temperatures">
+                    <div class="weather-forecast-temp"><strong>15°</strong> </div>
+                    <div class="weather-forecast-temp">9°</div>
+                </div>
+    </div> 
+`;
+
+
+});
+forecast.innerHTML = forecastHTML; 
+
+}
+
+
+
 let serchFormElement = document.querySelector("#searchForm");
 serchFormElement.addEventListener("submit", handleSearchSubmit);
+displayforecast(); 
