@@ -28,6 +28,9 @@ function updateweatherinfo(response){
     let oldicon = document.querySelector("#icon");
     oldicon.innerHTML = `<img src="${response.data.condition.icon_url}">`
 
+    getForcast(response.data.city);
+
+
 
 }
 
@@ -46,6 +49,15 @@ function formateDate(date){
 
     return `${day} ${hours}:${minutes}`
 }
+
+function formatDay(timestamp){
+
+    let date = new Date(timestamp *1000);
+    let days = ["Sun", "Mon", "Tues", "Wed", "Thurs", "Fri", "Sat"];
+
+    return days[date.getDay()];
+
+}
 function searchCity(city){
     let apikey = "f21c03107be2b6tbd1077of9aa76543f";
     let url = `https://api.shecodes.io/weather/v1/current?query=${city}&key=${apikey}&units=metric`;
@@ -58,7 +70,9 @@ function searchCity(city){
 function getForcast(city){
 
     let apikey = "f21c03107be2b6tbd1077of9aa76543f";
-    let apiURL = `https://api.shecodes.io/weather/v1/current?query={city}&key={apikey}`;
+    let apiURL = `https://api.shecodes.io/weather/v1/forecast?query=${city}&key=${apikey}&units=metric`;
+    axios(apiURL).then(displayforecast);
+    
 }
 
 
@@ -67,28 +81,37 @@ function handleSearchSubmit(event){
     event.preventDefault();
     let searchInput = document.querySelector("#search-input");
     
-    searchCity(searchInput.value)
+    searchCity(searchInput.value);
 };
 
-function displayforecast(){
+function displayforecast(response){
+console.log(response.data);
+    
 let forecast = document.querySelector("#forecast");
 let forecastHTML = "";
 
-let days = ["Tues", "Wed", "Thurs", "Fri", "Sat"];
 
-days.forEach(function(day){
 
-    forecastHTML =  forecastHTML + `
+response.data.daily.forEach(function(day, index){
+
+
+    if (index < 5){
+
+           forecastHTML =  forecastHTML + `
    <div class="weather-forecast-day">
-                <div class="weather-forecast-date">${day}</div>
-                <div class="weather-forecast-icon">☀️</div>
+                <div class="weather-forecast-date">${formatDay(day.time)}</div>
+                <div class="weather-forecast-icon"><img src="${day.condition.icon_url}"></div>
                 <div class="weather-forecast-temperatures">
-                    <div class="weather-forecast-temp"><strong>15°</strong> </div>
-                    <div class="weather-forecast-temp">9°</div>
+                    <div class="weather-forecast-temp"><strong>${Math.round(day.temperature.maximum)}°</strong> </div>
+                    <div class="weather-forecast-temp">${Math.round(day.temperature.minimum)}°</div>
                 </div>
     </div> 
 `;
 
+
+
+    }
+ 
 
 });
 forecast.innerHTML = forecastHTML; 
